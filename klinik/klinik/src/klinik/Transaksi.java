@@ -1,0 +1,113 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package klinik;
+
+import java.sql.*;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class Transaksi extends Database{
+    public String ID;
+    public String namapasien;
+    public Date tanggal;
+    public String IDdokter;
+    public String layanan;
+    public String total;
+
+         
+    
+    public String getID() {
+        return this.ID;
+    }
+    
+    
+    public boolean create() {
+        boolean operationSuccessful = false;
+
+        try {
+            openConnection();
+
+            String sql = "INSERT INTO transaksi VALUES (?, ?, ?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setString(1, ID);
+            preparedStatement.setString(2, namapasien);
+            preparedStatement.setDate(3, tanggal);
+            preparedStatement.setString(4, IDdokter);
+            preparedStatement.setString(5, layanan);
+            preparedStatement.setString(6, total);
+
+            int rowsAffected = this.preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                operationSuccessful = true;
+            }
+
+        } catch (SQLException ex) {
+            displayErrors(ex); // Handle the exception appropriately (log or rethrow)
+        } finally {
+            closeConnection();
+        }
+
+        return operationSuccessful;
+    }
+
+
+public boolean update() {
+    boolean isOperationSuccess = false;
+
+    try {
+        this.openConnection();
+
+        String sql = "UPDATE transaksi SET ID = ?, Nama_Pasien = ?, Tanggal = ?, ID_Dokter = ?,  Layanan = ?,  Total_Harga = ? WHERE ID = ?";
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setString(1, ID);
+            preparedStatement.setString(2, namapasien);
+            preparedStatement.setDate(3, tanggal);
+            preparedStatement.setString(4, IDdokter);
+            preparedStatement.setString(5, layanan);            
+            preparedStatement.setString(6, total);
+            preparedStatement.setString(7, ID);
+            
+            int rowsAffected = this.preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                isOperationSuccess = true;
+            }
+
+        } catch (SQLException ex) {
+            displayErrors(ex); // Handle the exception appropriately (log or rethrow)
+        } finally {
+            closeConnection();
+        }
+
+        return isOperationSuccess;
+}
+
+    public boolean delete() {
+        boolean isOperationSuccess = false;
+
+        try {
+            this.openConnection();
+
+            String sql = "DELETE FROM transaksi WHERE ID = ?";
+            this.preparedStatement = this.connection.prepareStatement(sql);
+            this.preparedStatement.setString(1, this.ID);
+
+            int result = this.preparedStatement.executeUpdate();
+
+            isOperationSuccess = result > 0;
+        } catch (SQLException ex) {
+            this.displayErrors(ex);
+        } finally {
+            this.closeConnection();
+        }
+
+        return isOperationSuccess;
+    }
+
+}
+
+
+
